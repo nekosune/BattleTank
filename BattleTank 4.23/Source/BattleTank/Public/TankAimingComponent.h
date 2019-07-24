@@ -1,9 +1,9 @@
 // Copywrite New Gaea Entertainment
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+
 #include "TankAimingComponent.generated.h"
 
 
@@ -15,14 +15,13 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTankAimingComponent();
+	// TODO: Add Turret reference
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	void AimAt(FVector hitLocation, float LaunchSpeed);
+	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+private:
+	UStaticMeshComponent* Barrel=nullptr;
+	void MoveBarrelTowards(const FVector& AimDirection);
 		
 };
