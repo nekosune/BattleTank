@@ -1,6 +1,7 @@
 // Copywrite New Gaea Entertainment
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Public/TankBarrel.h"
 #include "Public/TankAimingComponent.h"
 
 // Sets default values for this component's properties
@@ -26,12 +27,23 @@ void UTankAimingComponent::AimAt(FVector hitLocation, float LaunchSpeed)
 		StartLocation,
 		hitLocation,
 		LaunchSpeed,
+		false,
+		0,
+		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
+		//, FCollisionResponseParams::DefaultResponseParam,TArray<AActor*>{},true
 	);
 	if (bHaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		auto time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), time);
 		MoveBarrelTowards(AimDirection);
+	}
+	else
+	{
+		auto time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: No aim solve found"), time);
 	}
 }
 
@@ -43,11 +55,12 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector& AimDirection)
 
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	UE_LOG(LogTemp, Warning, TEXT("Aim as rotation: %s"), *DeltaRotator.ToString());
+	
+	Barrel->Elevate(DeltaRotator.Pitch);
 
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
