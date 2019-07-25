@@ -1,7 +1,8 @@
 // Copywrite New Gaea Entertainment
 
-#include "Public/TankAimingComponent.h"
 #include "Public/Tank.h"
+#include "Public/TankAimingComponent.h"
+
 
 void ATank::AimAt(FVector hitLocation)
 {
@@ -11,6 +12,11 @@ void ATank::AimAt(FVector hitLocation)
 void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
+}
+
+void ATank::SetTurretReference(UTankTurret* TurretToSet)
+{
+	TankAimingComponent->SetTurretReference(TurretToSet);
 }
 
 // Sets default values

@@ -1,8 +1,10 @@
 // Copywrite New Gaea Entertainment
 
+#include "Public/TankAimingComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Public/TankBarrel.h"
-#include "Public/TankAimingComponent.h"
+#include "Public/TankTurret.h"
+
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -17,6 +19,8 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::AimAt(FVector hitLocation, float LaunchSpeed)
 {
 	if (!Barrel)
+		return;
+	if (!Turret)
 		return;
 
 	FVector OutLaunchVelocity(0);
@@ -57,10 +61,16 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector& AimDirection)
 
 	
 	Barrel->Elevate(DeltaRotator.Pitch);
+	Turret->Turn(DeltaRotator.Yaw);
 
 }
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
+{
+	Turret = TurretToSet;
 }
