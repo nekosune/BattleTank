@@ -16,10 +16,10 @@ class BATTLETANK_API UTankTurret : public UStaticMeshComponent
 
 
 public:
-	void Turn(float RelativeSpeed);
+	void Rotate(float RelativeSpeed);
 
 private:
-	UPROPERTY(EditAnywhere, Category = Setup)
-		float MaxDegreesPerSecond = 20;
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+		float MaxDegreesPerSecond = 25;
 	
 };
