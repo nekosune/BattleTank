@@ -22,11 +22,17 @@ void ATankPlayerController::BeginPlay()
 
 void ATankPlayerController::AimTowardsCrosshair() const
 {
+	if(!GetPawn())
+	{
+		return;
+	}
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent))
 		return;
 	FVector HitLocation; // Out Parameter
-	if(GetSightRayHitLocation(HitLocation))
+	bool bGotSight = GetSightRayHitLocation(HitLocation);
+	UE_LOG(LogTemp, Warning, TEXT("Hit something: %i"), bGotSight);
+	if(bGotSight)
 	{
 		AimingComponent->AimAt(HitLocation);
 	}
@@ -46,17 +52,15 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 	const auto ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
 	FVector LookDirection;
-	if (GetLookDirection(ScreenLocation,LookDirection))
+
+	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
 		
-		if(GetLookVectorHitLocation(LookDirection, HitLocation))
-		{
-			
-		}
+		return GetLookVectorHitLocation(LookDirection, HitLocation);
 		
 	}
 	
-	return true;
+	return false;
 }
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
